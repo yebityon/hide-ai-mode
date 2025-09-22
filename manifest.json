@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Hide Google AI Mode",
+  "version": "1.0",
+  "description": "hide google AI Mode",
+  "icons": {
+    "48": "icons/icon1.png",
+    "96": "icons/icon1.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/*",
+        "https://www.google.co.jp/*"
+      ],
+      "js": ["hide-ai-mode.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
