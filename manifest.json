@@ -1,20 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Hide Google AI Mode",
-  "version": "2.1",
+  "version": "2.0",
   "description": "hide google AI Mode",
   "icons": {
     "48": "icons/icon1.png",
     "96": "icons/icon1.png"
-  },
-  "permissions": ["storage"],
-  "browser_action": {
-    "default_title": "Hide Google AI Mode",
-    "default_popup": "popup.html",
-    "default_icon": {
-      "48": "icons/icon1.png",
-      "96": "icons/icon1.png"
-    }
   },
   "content_scripts": [
     {
@@ -23,7 +14,6 @@
         "https://www.google.co.jp/*"
       ],
       "js": ["hide-ai-mode.js"],
-      "css": ["hide-ai.css"],
       "run_at": "document_end"
     }
   ]
