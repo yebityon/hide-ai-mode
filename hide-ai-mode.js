@@ -39,20 +39,21 @@
   function findAiOverviewBlock(headingEl) {
     // find a elements which contains descKey
     const header = headingEl.closest('[id$="-header"]')
+    let idRoot = null;
     if (header && header.id) {
       // "-header".length = 7
       const aiOverviewEntireId = header.id.slice(0, -7);
       const root = document.getElementById(aiOverviewEntireId);
-      if (root && root.contains(header)) return root;
+      if (root && root.contains(header)) idRoot = root;
     }
     // Walk up from the heading and keep the outermost block that still excludes
-    // the organic results. Hiding only #m-x-content leaves its fixed-height
-    // wrapper and the "Show more" button behind.
+    // the organic results. Hiding only #m-x-content, or only the id-matched root,
+    // leaves a fixed-height wrapper (and the "Show more" button) behind.
     // rso -> 通常の検索結果の一覧が表示されているコンテナ
     const rso = document.getElementById('rso');
+    let found = null;
     if (rso) {
       let el = headingEl;
-      let found = null;
       while (el && el !== document.body) {
         if (el.contains(rso)) break;
         if (el.hasAttribute('data-hveid')) found = el;
@@ -60,8 +61,10 @@
         if (el.parentElement && el.parentElement.id === 'rcnt') break;
         el = el.parentElement;
       }
-      if (found) return found;
     }
+    // Prefer the walk-up result only when it encloses the id-matched root.
+    if (found && (!idRoot || found.contains(idRoot))) return found;
+    if (idRoot) return idRoot;
     //  something wrong
     return headingEl.closest('#m-x-content');
   }
