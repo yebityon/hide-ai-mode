@@ -45,21 +45,25 @@
       const root = document.getElementById(aiOverviewEntireId);
       if (root && root.contains(header)) return root;
     }
-    //  something wrong
-    const mx = headingEl.closest('#m-x-content');
-    if (mx) return mx;
-    // only called when `closest` does not work, manually walkup to head
-    let el = header;
-    let found = null;
-    const maxDepth = 12;
-
-    for (let i = 0; i < maxDepth && el && el !== document.body; i++) {
-      if (el.parentElement && el.parentElement.id === 'rcnt') break;
-      if (el.hasAttribute('data-hveid')) found = el;
-      el = el.parentElement;
+    // Walk up from the heading and keep the outermost block that still excludes
+    // the organic results. Hiding only #m-x-content leaves its fixed-height
+    // wrapper and the "Show more" button behind.
+    // rso -> 通常の検索結果の一覧が表示されているコンテナ
+    const rso = document.getElementById('rso');
+    if (rso) {
+      let el = headingEl;
+      let found = null;
+      while (el && el !== document.body) {
+        if (el.contains(rso)) break;
+        if (el.hasAttribute('data-hveid')) found = el;
+        // if el.parent == 'rcnt' means area of search result
+        if (el.parentElement && el.parentElement.id === 'rcnt') break;
+        el = el.parentElement;
+      }
+      if (found) return found;
     }
-    if (found?.contains(document.getElementById('rso'))) return null;
-    return found;
+    //  something wrong
+    return headingEl.closest('#m-x-content');
   }
 
 
